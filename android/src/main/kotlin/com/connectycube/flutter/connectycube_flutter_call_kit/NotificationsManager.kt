@@ -59,9 +59,25 @@ fun showCallNotification(
 
     val callTypeTitle =
         String.format(CALL_TYPE_PLACEHOLDER, if (callType == 1) "Video" else "Audio")
-
+    // *------ To create full screen calling intent
+    val callFullScreenIntent: Intent = createStartIncomingScreenIntent(
+        context,
+        callId,
+        callType,
+        callInitiatorId,
+        callInitiatorName,
+        callOpponents,
+        userInfo
+    )
+    val fullScreenPendingIntent = PendingIntent.getActivity(
+        context,
+        callId.hashCode(),
+        callFullScreenIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
+    // *------ End of modification code !
     val builder: NotificationCompat.Builder =
-        createCallNotification(context, callInitiatorName, callTypeTitle, pendingIntent, ringtone)
+        createCallNotification(context, callInitiatorName, callTypeTitle, pendingIntent,fullScreenPendingIntent ,ringtone)
 
     // Add actions
     addCallRejectAction(
@@ -87,14 +103,8 @@ fun showCallNotification(
 
     // Add full screen intent (to show on lock screen)
     addCallFullScreenIntent(
-        context,
         builder,
-        callId,
-        callType,
-        callInitiatorId,
-        callInitiatorName,
-        callOpponents,
-        userInfo
+        fullScreenPendingIntent
     )
 
     // Add action when delete call notification
@@ -130,6 +140,7 @@ fun createCallNotification(
     title: String,
     text: String?,
     pendingIntent: PendingIntent,
+    callFullScreenIntent: PendingIntent,
     ringtone: Uri
 ): NotificationCompat.Builder {
     val notificationBuilder = NotificationCompat.Builder(context, CALL_CHANNEL_ID)
@@ -138,9 +149,10 @@ fun createCallNotification(
         .setContentTitle(title)
         .setContentText(text)
         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-        .setAutoCancel(true)
+        .setAutoCancel(false)
         .setOngoing(true)
         .setCategory(NotificationCompat.CATEGORY_CALL)
+        .setFullScreenIntent(callFullScreenIntent,true)
         .setContentIntent(pendingIntent)
         .setSound(ringtone)
         .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -224,30 +236,9 @@ fun addCallAcceptAction(
 }
 
 fun addCallFullScreenIntent(
-    context: Context,
     notificationBuilder: NotificationCompat.Builder,
-    callId: String,
-    callType: Int,
-    callInitiatorId: Int,
-    callInitiatorName: String,
-    callOpponents: ArrayList<Int>,
-    userInfo: String
+    fullScreenPendingIntent : PendingIntent
 ) {
-    val callFullScreenIntent: Intent = createStartIncomingScreenIntent(
-        context,
-        callId,
-        callType,
-        callInitiatorId,
-        callInitiatorName,
-        callOpponents,
-        userInfo
-    )
-    val fullScreenPendingIntent = PendingIntent.getActivity(
-        context,
-        callId.hashCode(),
-        callFullScreenIntent,
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
-    )
     notificationBuilder.setFullScreenIntent(fullScreenPendingIntent, true)
 }
 
@@ -297,8 +288,9 @@ fun createCallNotificationChannel(notificationManager: NotificationManagerCompat
 
 fun setNotificationSmallIcon(context: Context, notificationBuilder: NotificationCompat.Builder) {
     val customIcon = getString(context, "notification_icon")
+
     val resID =
-        context.resources.getIdentifier(customIcon ?: "ic_launcher_foreground", "drawable", context.packageName)
+    context.resources.getIdentifier(customIcon ?: "ic_launcher_foreground", "drawable", context.packageName)
     if (resID != 0) {
         notificationBuilder.setSmallIcon(resID)
     } else {
