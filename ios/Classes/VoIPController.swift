@@ -51,18 +51,30 @@ extension VoIPController: PKPushRegistryDelegate {
     
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
         print("[VoIPController][pushRegistry][didReceiveIncomingPushWith] payload: \(payload.dictionaryPayload)")
-        let callData = payload.dictionaryPayload
-        
         if type == .voIP{
-            let callId = callData["session_id"] as! String
-            let callType = callData["call_type"] as! Int
+        // Process Push 
+        processVoIPPush(with: payload.dictionaryPayload, and: completion) 
+        }
+    }
+
+
+    // Push VoIP Processing
+    private func processVoIPPush(with callData: Dictionary<AnyHashable, Any>,
+                                  and completion: (() -> Void)?
+         ) {
+             NSLog("Enigma Push Notification Handling")
+            // !
+            let callId = callData["uuid"] as! String
+            let callType =  2 // callData["call_type"] as! Int // => video : 1 / audio : 2
             let callInitiatorId = callData["caller_id"] as! Int
             let callInitiatorName = callData["caller_name"] as! String
-            let callOpponentsString = callData["call_opponents"] as! String
+            let callOpponentsString =  "" // callData["call_opponents"] as! String // FIXME
             let callOpponents = callOpponentsString.components(separatedBy: ",")
                 .map { Int($0) ?? 0 }
-            let userInfo = callData["user_info"] as? String
-            
+            let userInfo = callData["token"] as! String // callData["user_info"] as? String // => Getting MEeting Token in userInfo
+            // !
+
+            // * Report the incoming voip push to callkit
             self.callKitController.reportIncomingCall(uuid: callId.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, userInfo: userInfo) { (error) in
                 if(error == nil){
                     print("[VoIPController][didReceiveIncomingPushWith] reportIncomingCall SUCCESS")
@@ -70,6 +82,6 @@ extension VoIPController: PKPushRegistryDelegate {
                     print("[VoIPController][didReceiveIncomingPushWith] reportIncomingCall ERROR: \(error?.localizedDescription ?? "none")")
                 }
             }
-        }
-    }
+    
+         } // Process Push
 }
