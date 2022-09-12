@@ -37,8 +37,12 @@ extension VoIPController: PKPushRegistryDelegate {
         }
         
         print("[VoIPController][pushRegistry] token: \(pushCredentials.token)")
-        
-        let deviceToken: String = pushCredentials.token.reduce("", {$0 + String(format: "%02X", $1) })
+
+        // Original encoding
+        // let deviceToken: String = pushCredentials.token.reduce("", {$0 + String(format: "%02X", $1) })
+        //Custom encoding
+        let deviceToken: String = pushCredentials.token.hexEncodedString()
+
         print("[VoIPController][pushRegistry] deviceToken: \(deviceToken)")
         
         self.voipToken = deviceToken
@@ -84,4 +88,19 @@ extension VoIPController: PKPushRegistryDelegate {
             }
     
          } // Process Push
+}
+
+
+/// * ############## Helper Classes & Extensions ##############
+
+extension Foundation.Data {
+    struct HexEncodingOptions: OptionSet {
+        let rawValue: Int
+        static let upperCase = HexEncodingOptions(rawValue: 1 << 0)
+    }
+
+    func hexEncodedString(options: HexEncodingOptions = []) -> String {
+        let format = options.contains(.upperCase) ? "%02hhX" : "%02hhx"
+        return self.map { String(format: format, $0) }.joined()
+    }
 }
