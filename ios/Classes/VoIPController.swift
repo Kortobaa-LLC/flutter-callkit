@@ -53,14 +53,14 @@ extension VoIPController: PKPushRegistryDelegate {
         print("[VoIPController][pushRegistry][didReceiveIncomingPushWith] payload: \(payload.dictionaryPayload)")
         if type == .voIP{
         // Process Push 
-        processVoIPPush(with: payload.dictionaryPayload, and: completion) 
+        processVoIPPush(with: payload.dictionaryPayload) 
         }
     }
 
 
     // Push VoIP Processing
-    private func processVoIPPush(with callData: Dictionary<AnyHashable, Any>,
-                                  and completion: (() -> Void)?
+    private func processVoIPPush(with callData: Dictionary<AnyHashable, Any>
+                                
          ) {
              NSLog("Enigma Push Notification Handling")
             // !
