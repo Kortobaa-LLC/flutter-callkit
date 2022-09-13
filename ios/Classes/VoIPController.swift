@@ -36,20 +36,20 @@ extension VoIPController: PKPushRegistryDelegate {
             return
         }
         
-        print("[VoIPController][pushRegistry] token: \(pushCredentials.token)")
+        print("[NATIVE VoIPController][pushRegistry] raw token: \(pushCredentials.token)")
 
         // Original encoding
-         let deviceToken: String = pushCredentials.token.reduce("", {$0 + String(format: "%02X", $1) })
-        //Custom encoding
-       // let deviceToken: String = pushCredentials.token.hexEncodedString()
+        // let deviceToken: String = pushCredentials.token.reduce("", {$0 + String(format: "%02X", $1) })
+        // Custom encoding
+        let deviceToken: String = pushCredentials.token.hexEncodedString()
 
         print("NATIVE [VoIPController][pushRegistry] deviceToken: \(deviceToken)")
         
         self.voipToken = deviceToken
         
         if tokenListener != nil {
-            print("[VoIPController][pushRegistry] notify listener")
-            tokenListener!(self.voipToken!)
+            print("NATIVE [VoIPController][pushRegistry] notify listener")
+            tokenListener!(deviceToken)
         }
     }
     
