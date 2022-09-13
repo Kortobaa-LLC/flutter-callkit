@@ -106,10 +106,15 @@ class CallKitController : NSObject {
         update.supportsUngrouping = false
         update.supportsHolding = false
         update.supportsDTMF = false
-        
+            // Generate call uuid string
+                       guard  let uuidObject = UUID(uuidString: uuid),
+                                        else {
+                                            return
+                                    }
         if (self.currentCallData["session_id"] == nil || self.currentCallData["session_id"] as! String != uuid) {
             print("[CallKitController][reportIncomingCall] report new call: \(uuid)")
-            provider.reportNewIncomingCall(with: UUID(uuidString: uuid)!, update: update) { error in
+
+            provider.reportNewIncomingCall(with: uuidObject, update: update) { error in
                 completion?(error)
                 if(error == nil){
                     self.configureAudioSession()
@@ -127,7 +132,7 @@ class CallKitController : NSObject {
             }
         } else if (self.currentCallData["session_id"] as! String == uuid) {
             print("[CallKitController][reportIncomingCall] update existing call: \(uuid)")
-            provider.reportCall(with: UUID(uuidString: uuid)!, updated: update)
+            provider.reportCall(with: uuidObject, updated: update)
         }
     }
     

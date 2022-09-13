@@ -67,8 +67,12 @@ extension VoIPController: PKPushRegistryDelegate {
                                 
          ) {
              NSLog("Enigma Push Notification Handling")
-            // !
-            let callId = callData["uuid"] as! String
+
+            // Get call uuid string
+                       guard let uuidString = callData["uuid"] as? String,
+                                else {
+                                    return
+                            }
             let callType =  2 // callData["call_type"] as! Int // => video : 1 / audio : 2
             let callInitiatorId = callData["caller_id"] as! Int
             let callInitiatorName = callData["caller_name"] as! String
@@ -79,7 +83,7 @@ extension VoIPController: PKPushRegistryDelegate {
             // !
 
             // * Report the incoming voip push to callkit
-            self.callKitController.reportIncomingCall(uuid: callId.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, userInfo: userInfo) { (error) in
+            self.callKitController.reportIncomingCall(uuid: uuidString.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, userInfo: userInfo) { (error) in
                 if(error == nil){
                     print("[VoIPController][didReceiveIncomingPushWith] reportIncomingCall SUCCESS")
                 } else {
