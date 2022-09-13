@@ -39,11 +39,11 @@ extension VoIPController: PKPushRegistryDelegate {
         print("[VoIPController][pushRegistry] token: \(pushCredentials.token)")
 
         // Original encoding
-        // let deviceToken: String = pushCredentials.token.reduce("", {$0 + String(format: "%02X", $1) })
+         let deviceToken: String = pushCredentials.token.reduce("", {$0 + String(format: "%02X", $1) })
         //Custom encoding
-        let deviceToken: String = pushCredentials.token.hexEncodedString()
+       // let deviceToken: String = pushCredentials.token.hexEncodedString()
 
-        print("[VoIPController][pushRegistry] deviceToken: \(deviceToken)")
+        print("NATIVE [VoIPController][pushRegistry] deviceToken: \(deviceToken)")
         
         self.voipToken = deviceToken
         
