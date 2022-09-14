@@ -108,6 +108,7 @@ class CallKitController : NSObject {
         update.supportsDTMF = false
         // Generate call uuid string
         guard  let uuidObject = UUID(uuidString: uuid) else {
+                    print("[Enigma] Failed to create uuidObject: \(uuid)")
                                             return
                                     }
         if (self.currentCallData["session_id"] == nil || self.currentCallData["session_id"] as! String != uuid) {
