@@ -69,8 +69,7 @@ extension VoIPController: PKPushRegistryDelegate {
              NSLog("Enigma Push Notification Handling")
 
             // Get call uuid string
-                       guard let uuidString = callData["uuid"] as? String,
-                                else {
+            guard let uuidString = callData["uuid"] as? String   else {
                                     return
                             }
             let callType =  2 // callData["call_type"] as! Int // => video : 1 / audio : 2

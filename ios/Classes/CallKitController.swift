@@ -106,9 +106,8 @@ class CallKitController : NSObject {
         update.supportsUngrouping = false
         update.supportsHolding = false
         update.supportsDTMF = false
-            // Generate call uuid string
-                       guard  let uuidObject = UUID(uuidString: uuid),
-                                        else {
+        // Generate call uuid string
+        guard  let uuidObject = UUID(uuidString: uuid) else {
                                             return
                                     }
         if (self.currentCallData["session_id"] == nil || self.currentCallData["session_id"] as! String != uuid) {
