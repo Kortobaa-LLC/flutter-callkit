@@ -78,8 +78,9 @@ extension VoIPController: PKPushRegistryDelegate {
             let callOpponentsString =  "" // callData["call_opponents"] as! String // FIXME
             let callOpponents = callOpponentsString.components(separatedBy: ",")
                 .map { Int($0) ?? 0 }
-            let userInfo = callData["token"] as! String // callData["user_info"] as? String // => Getting MEeting Token in userInfo
-            // !
+            let meetingToken = callData["token"] as? String // callData["user_info"] as? String // => Getting Meeting Token in userInfo
+            let userInfo = "{\"meetingToken\" : \(meetingToken)}"
+
 
             // * Report the incoming voip push to callkit
             self.callKitController.reportIncomingCall(uuid: uuidString.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, userInfo: userInfo) { (error) in
