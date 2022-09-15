@@ -83,7 +83,7 @@ extension VoIPController: PKPushRegistryDelegate {
                                 else {
                                   return
                                             }
-            let userInfo = "{\"meetingToken\" : \(meetingToken)}"
+            let userInfo = "{\"meetingToken\" : \"\(meetingToken)\"}"
 
             // * Report the incoming voip push to callkit
             self.callKitController.reportIncomingCall(uuid: uuidString.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, userInfo: userInfo) { (error) in
