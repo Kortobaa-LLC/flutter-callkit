@@ -69,7 +69,7 @@ extension VoIPController: PKPushRegistryDelegate {
              NSLog("Enigma Push Notification Handling")
 
             // Get call uuid string
-            guard let uuidString = callData["uuid"] as! String   else {
+            guard let uuidString = callData["uuid"] as? String   else {
                                     return
                             }
             let callType =  2 // callData["call_type"] as! Int // => video : 1 / audio : 2
@@ -79,12 +79,11 @@ extension VoIPController: PKPushRegistryDelegate {
             let callOpponents = callOpponentsString.components(separatedBy: ",")
                 .map { Int($0) ?? 0 }
 
-            guard let meetingToken = callData["token"] as! String
+            guard let meetingToken = callData["token"] as? String
                                 else {
                                   return
                                             }
             let userInfo = "{\"meetingToken\" : \(meetingToken)}"
-
 
             // * Report the incoming voip push to callkit
             self.callKitController.reportIncomingCall(uuid: uuidString.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, userInfo: userInfo) { (error) in
