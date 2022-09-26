@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:universal_io/io.dart';
 
+import 'call_ended_reason.dart';
 import 'call_event.dart';
 
 /// Function type for handling accepted and rejected call events
@@ -183,6 +184,13 @@ class ConnectycubeFlutterCallKit {
     return _methodChannel.invokeMethod("reportCallEnded", {
       'session_id': sessionId,
     });
+  }
+
+  /// Report that the current call has been ended by reasons other than your app
+  static Future<void> reportCallFinished(
+      {required String? sessionId, required CallEndedReason? reason}) async {
+    return _methodChannel.invokeMethod("reportCallFinished",
+        {'session_id': sessionId, 'reason': reason?.name});
   }
 
   /// Get the current call state

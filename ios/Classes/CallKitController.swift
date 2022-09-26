@@ -25,6 +25,8 @@ enum CallEndedReason : String {
     case failed = "failed"
     case unanswered = "unanswered"
     case remoteEnded = "remoteEnded"
+    case answeredElsewhere = "answeredElsewhere"
+    case declinedElsewhere = "declinedElsewhere"
 }
 
 enum CallState : String {

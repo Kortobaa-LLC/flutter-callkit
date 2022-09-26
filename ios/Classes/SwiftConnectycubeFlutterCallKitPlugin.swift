@@ -105,8 +105,6 @@ public class SwiftConnectycubeFlutterCallKitPlugin: NSObject, FlutterPlugin {
         else if (call.method == "reportCallFinished"){
             let callId = arguments["session_id"] as! String
             let reason = arguments["reason"] as! String
-            
-            
             SwiftConnectycubeFlutterCallKitPlugin.callController.reportCallEnded(uuid: UUID(uuidString: callId)!, reason: CallEndedReason.init(rawValue: reason)!);
             result(true);
         }
