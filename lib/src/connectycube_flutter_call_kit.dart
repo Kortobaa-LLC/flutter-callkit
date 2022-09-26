@@ -187,10 +187,13 @@ class ConnectycubeFlutterCallKit {
   }
 
   /// Report that the current call has been ended by reasons other than your app
+  /// Only supports : iOS
   static Future<void> reportCallFinished(
       {required String? sessionId, required CallEndedReason? reason}) async {
-    return _methodChannel.invokeMethod("reportCallFinished",
-        {'session_id': sessionId, 'reason': reason?.name});
+    if (Platform.isIOS) {
+      return _methodChannel.invokeMethod("reportCallFinished",
+          {'session_id': sessionId, 'reason': reason?.name});
+    }
   }
 
   /// Get the current call state
