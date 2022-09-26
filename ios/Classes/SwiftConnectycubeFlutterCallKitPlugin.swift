@@ -73,21 +73,21 @@ public class SwiftConnectycubeFlutterCallKitPlugin: NSObject, FlutterPlugin {
             result(voipToken)
         }
         else if(call.method == "updateConfig"){
-            let ringtone = arguments["ringtone"] as? String
-            let icon = arguments["icon"] as? String
+            let ringtone = arguments?["ringtone"] as? String
+            let icon = arguments?["icon"] as? String
             CallKitController.updateConfig(ringtone: ringtone, icon: icon)
             
             result(true)
         }
         else if(call.method == "showCallNotification"){
-            let callId = arguments["session_id"] as! String
-            let callType = arguments["call_type"] as! Int
-            let callInitiatorId = arguments["caller_id"] as! Int
-            let callInitiatorName = arguments["caller_name"] as! String
-            let callOpponentsString = arguments["call_opponents"] as! String
+            let callId = arguments?["session_id"] as! String
+            let callType = arguments?["call_type"] as! Int
+            let callInitiatorId = arguments?["caller_id"] as! Int
+            let callInitiatorName = arguments?["caller_name"] as! String
+            let callOpponentsString = arguments?["call_opponents"] as! String
             let callOpponents = callOpponentsString.components(separatedBy: ",")
                 .map { Int($0) ?? 0 }
-            let userInfo = arguments["user_info"] as? String
+            let userInfo = arguments?["user_info"] as? String
 
             SwiftConnectycubeFlutterCallKitPlugin.callController.reportIncomingCall(uuid: callId.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, userInfo: userInfo) { (error) in
                 print("[SwiftConnectycubeFlutterCallKitPlugin][handle] reportIncomingCall ERROR: \(error?.localizedDescription ?? "none")")
@@ -95,51 +95,51 @@ public class SwiftConnectycubeFlutterCallKitPlugin: NSObject, FlutterPlugin {
             }
         }
         else if(call.method == "reportCallAccepted"){
-            let callId = arguments["session_id"] as! String
-            let callType = arguments["call_type"] as! Int
+            let callId = arguments?["session_id"] as! String
+            let callType = arguments?["call_type"] as! Int
             let videoEnabled = callType == 1
             
             SwiftConnectycubeFlutterCallKitPlugin.callController.startCall(handle: callId, videoEnabled: videoEnabled, uuid: callId)
             result(true)
         }
         else if (call.method == "reportCallFinished"){
-            let callId = arguments["session_id"] as! String
-            let reason = arguments["reason"] as! String
+            let callId = arguments?["session_id"] as! String
+            let reason = arguments?["reason"] as! String
             SwiftConnectycubeFlutterCallKitPlugin.callController.reportCallEnded(uuid: UUID(uuidString: callId)!, reason: CallEndedReason.init(rawValue: reason)!);
             result(true);
         }
         else if (call.method == "reportCallEnded"){
-            let callId = arguments["session_id"] as! String
+            let callId = arguments?["session_id"] as! String
             SwiftConnectycubeFlutterCallKitPlugin.callController.end(uuid: UUID(uuidString: callId)!)
             result(true)
         }
         else if (call.method == "muteCall"){
-            let callId = arguments["session_id"] as! String
-            let muted = arguments["muted"] as! Bool
+            let callId = arguments?["session_id"] as! String
+            let muted = arguments?["muted"] as! Bool
             
             SwiftConnectycubeFlutterCallKitPlugin.callController.setMute(uuid: UUID(uuidString: callId)!, muted: muted)
             result(true)
         }
         else if (call.method == "getCallState"){
-            let callId = arguments["session_id"] as! String
+            let callId = arguments?["session_id"] as! String
             
             result(SwiftConnectycubeFlutterCallKitPlugin.callController.getCallState(uuid: callId).rawValue)
         }
         else if (call.method == "setCallState"){
-            let callId = arguments["session_id"] as! String
-            let callState = arguments["call_state"] as! String
+            let callId = arguments?["session_id"] as! String
+            let callState = arguments?["call_state"] as! String
             
             SwiftConnectycubeFlutterCallKitPlugin.callController.setCallState(uuid: callId, callState: callState)
             result(true)
         }
         
         else if (call.method == "getCallData"){
-            let callId = arguments["session_id"] as! String
+            let callId = arguments?["session_id"] as! String
             
             result(SwiftConnectycubeFlutterCallKitPlugin.callController.getCallData(uuid: callId))
         }
         else if (call.method == "clearCallData"){
-            let callId = arguments["session_id"] as! String
+            let callId = arguments?["session_id"] as! String
             
             SwiftConnectycubeFlutterCallKitPlugin.callController.clearCallData(uuid: callId)
             result(true)
