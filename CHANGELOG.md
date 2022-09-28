@@ -1,3 +1,14 @@
+## 2.2.1
+
+- (Android) Fix receiving the FCM if plugin connected together with `firebase_messaging` plugin;
+
+## 2.2.0
+
+- (iOS) Fix notifying plugin about call accepting;
+
+Broken API:
+  - changed the signature of method `reportCallAccepted` by deleting the parameter `callType`;
+
 ## 2.1.0
 
 - (Android) Add the possibility of setting a Notification icon;
