@@ -72,7 +72,7 @@ class ConnectycubeFCMReceiver : BroadcastReceiver() {
 
 
         val meetingToken = data["token"]
-        val userInfo =   "\"meetingToken\" : $meetingToken"   // data["user_info"] ?: JSONObject(emptyMap<String, String>()).toString()
+        val userInfo =   "{\"meetingToken\" : $meetingToken}"   // data["user_info"] ?: JSONObject(emptyMap<String, String>()).toString()
 
         if (callType == null || callInitiatorId == null || callInitiatorName == null || meetingToken == null) {
             return
