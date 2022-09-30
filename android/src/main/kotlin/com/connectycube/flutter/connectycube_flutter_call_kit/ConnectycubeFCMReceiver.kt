@@ -64,10 +64,10 @@ class ConnectycubeFCMReceiver : BroadcastReceiver() {
         val callInitiatorId = data["caller_id"]?.toInt()
         val callInitiatorName = data["caller_name"]
         val callOpponentsString =  "" // data["call_opponents"]
-        var callOpponents = ArrayList<Int>()
-        if (callOpponentsString != null) {
-            callOpponents = ArrayList(callOpponentsString.split(',').map { it.toInt() })
-        }
+        var callOpponents =  [callInitiatorId] //ArrayList<Int>()
+//        if (callOpponentsString != null) {
+//            callOpponents = ArrayList(callOpponentsString.split(',').map { it.toInt() })
+//        }
 
         val meetingToken = data["token"]
         val userInfo =   "\"meetingToken\" : $meetingToken"   // data["user_info"] ?: JSONObject(emptyMap<String, String>()).toString()
