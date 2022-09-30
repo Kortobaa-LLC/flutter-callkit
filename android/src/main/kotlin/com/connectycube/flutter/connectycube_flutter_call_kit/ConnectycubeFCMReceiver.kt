@@ -13,14 +13,14 @@ class ConnectycubeFCMReceiver : BroadcastReceiver() {
     private val TAG = "ConnectycubeFCMReceiver"
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d(TAG, "broadcast received for message")
+        Log.d(TAG, "Enigma broadcast received for message")
 
         ContextHolder.applicationContext = context!!.applicationContext
 
         if (intent!!.extras == null) {
             Log.d(
                 TAG,
-                "broadcast received but intent contained no extras to process RemoteMessage. Operation cancelled."
+                "Enigma broadcast received but intent contained no extras to process RemoteMessage. Operation cancelled."
             )
             return
         }
@@ -28,33 +28,29 @@ class ConnectycubeFCMReceiver : BroadcastReceiver() {
         val remoteMessage = RemoteMessage(intent.extras!!)
 
         val data = remoteMessage.data
-        if (data.containsKey("signal_type")) {
-            when (data["signal_type"]) {
-                "startCall" -> {
+        if (data.containsKey("process_type")) {
+            when (data["process_type"]) {
+                "calling" -> {
                     processInviteCallEvent(context.applicationContext, data)
                 }
 
-                "endCall" -> {
-                    processEndCallEvent(context.applicationContext, data)
-                }
-
-                "rejectCall" -> {
-                    processEndCallEvent(context.applicationContext, data)
-                }
+               else ->  {
+                   processEndCallEvent(context.applicationContext, data)
+               }
             }
 
         }
     }
 
     private fun processEndCallEvent(applicationContext: Context, data: Map<String, String>) {
-        val callId = data["session_id"] ?: return
+        val callId = data["uuid"] ?: return
 
 
         processCallEnded(applicationContext, callId)
     }
 
     private fun processInviteCallEvent(applicationContext: Context, data: Map<String, String>) {
-        val callId = data["session_id"]
+        val callId = data["uuid"]
 
         if (callId == null || CALL_STATE_UNKNOWN != getCallState(
                 applicationContext,
@@ -64,18 +60,19 @@ class ConnectycubeFCMReceiver : BroadcastReceiver() {
             return
         }
 
-        val callType = data["call_type"]?.toInt()
+        val callType =   2 // data["call_type"]?.toInt()  // => video : 1 / audio : 2
         val callInitiatorId = data["caller_id"]?.toInt()
         val callInitiatorName = data["caller_name"]
-        val callOpponentsString = data["call_opponents"]
+        val callOpponentsString =  "" // data["call_opponents"]
         var callOpponents = ArrayList<Int>()
         if (callOpponentsString != null) {
             callOpponents = ArrayList(callOpponentsString.split(',').map { it.toInt() })
         }
 
-        val userInfo = data["user_info"] ?: JSONObject(emptyMap<String, String>()).toString()
+        val meetingToken = data["token"]
+        val userInfo =   "\"meetingToken\" : $meetingToken"   // data["user_info"] ?: JSONObject(emptyMap<String, String>()).toString()
 
-        if (callType == null || callInitiatorId == null || callInitiatorName == null || callOpponents.isEmpty()) {
+        if (callType == null || callInitiatorId == null || callInitiatorName == null || meetingToken == null) {
             return
         }
 
