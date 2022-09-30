@@ -75,7 +75,8 @@ extension VoIPController: PKPushRegistryDelegate {
             let callType =  2 // callData["call_type"] as! Int // => video : 1 / audio : 2
             let callInitiatorId = callData["caller_id"] as! Int
             let callInitiatorName = callData["caller_name"] as! String
-            let callOpponentsString =  "" // callData["call_opponents"] as! String // FIXME
+            let callOpponentsString =  "" // callData["call_opponents"] as! String
+            // FIXME : Fix received call opponents
             let callOpponents = callOpponentsString.components(separatedBy: ",")
                 .map { Int($0) ?? 0 }
 
