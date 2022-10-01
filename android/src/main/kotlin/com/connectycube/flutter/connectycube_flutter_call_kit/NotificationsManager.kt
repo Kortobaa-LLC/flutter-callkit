@@ -40,8 +40,7 @@ fun showCallNotification(
         context,
         callId.hashCode(),
         intent,
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
-
+        getPendingIntentFlag()
     )
 
     var ringtone: Uri
@@ -73,7 +72,7 @@ fun showCallNotification(
         context,
         callId.hashCode(),
         callFullScreenIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT
+        getPendingIntentFlag()
     )
     // *------ End of modification code !
     val builder: NotificationCompat.Builder =
@@ -184,7 +183,7 @@ fun addCallRejectAction(
         Intent(context, EventReceiver::class.java)
             .setAction(ACTION_CALL_REJECT)
             .putExtras(bundle),
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
+        getPendingIntentFlag()
     )
     val declineAction: NotificationCompat.Action = NotificationCompat.Action.Builder(
         context.resources.getIdentifier(
@@ -224,7 +223,7 @@ fun addCallAcceptAction(
         Intent(context, EventReceiver::class.java)
             .setAction(ACTION_CALL_ACCEPT)
             .putExtras(bundle),
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
+            getPendingIntentFlag()
     )
     val acceptAction: NotificationCompat.Action = NotificationCompat.Action.Builder(
         context.resources.getIdentifier("ic_menu_call", "drawable", context.packageName),
@@ -264,7 +263,7 @@ fun addCancelCallNotificationIntent(
         Intent(appContext, EventReceiver::class.java)
             .setAction(ACTION_CALL_NOTIFICATION_CANCELED)
             .putExtras(bundle),
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
+        getPendingIntentFlag()
     )
     notificationBuilder.setDeleteIntent(deleteCallNotificationPendingIntent)
 }
@@ -318,3 +317,9 @@ fun setNotificationColor(context: Context, notificationBuilder: NotificationComp
         }
     }
 }
+
+
+/// A function for getting the approbriate PendingIntent Flag depending on the SDK API version.
+fun getPendingIntentFlag():Int =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
+

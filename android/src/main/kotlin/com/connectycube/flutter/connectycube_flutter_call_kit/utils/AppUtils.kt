@@ -37,12 +37,13 @@ fun isApplicationForeground(context: Context): Boolean {
     val appProcesses = activityManager.runningAppProcesses ?: return false
     val packageName = context.packageName
     // *  A workaround to fix the terminated state callbacks not firing in terminated state.
+    // in android API 28 and below
     // For more details check this issue:
     // https://github.com/ConnectyCube/connectycube-flutter-call-kit/issues/48
-    Log.i("Kortobaa", "Current Version SDK  ${android.os.Build.VERSION.SDK_INT}")
+    Log.i("Enigma", "Current Version SDK  ${android.os.Build.VERSION.SDK_INT}")
 
     if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.P){
-        Log.i("Kortobaa", "Version <= API 28")
+        Log.i("Enigma", "Version <= API 28")
         return false
     }
     // * ============================= Remove when you find better solution !
