@@ -15,6 +15,9 @@ typedef CallEventHandler = Future<dynamic> Function(CallEvent event);
 /// {@template connectycube_flutter_call_kit}
 /// Plugin to manage call events and notifications
 /// {@endtemplate}
+
+/// Add enrty-point annotation to dart-vm to prevent an error with flutter 3.3.0 in release mode
+@pragma('vm:entry-point')
 class ConnectycubeFlutterCallKit {
   static const MethodChannel _methodChannel =
       const MethodChannel('connectycube_flutter_call_kit.methodChannel');
@@ -305,6 +308,7 @@ class ConnectycubeFlutterCallKit {
 // from the native portion of the plugin. This allows for the plugin to perform
 // any necessary processing in Dart (e.g., populating a custom object) before
 // invoking the provided callback.
+@pragma('vm:entry-point')
 void _backgroundEventsCallbackDispatcher() {
   // Initialize state necessary for MethodChannels.
   WidgetsFlutterBinding.ensureInitialized();
