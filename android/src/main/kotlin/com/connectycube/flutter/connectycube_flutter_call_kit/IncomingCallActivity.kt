@@ -130,7 +130,7 @@ class IncomingCallActivity : Activity() {
         val avatarImg: ImageView =
             findViewById(resources.getIdentifier("avatar_img", "id", packageName))
 
-        val defaultImgResId = resources.getIdentifier("connectycube_place_holder", "drawable", packageName)
+        val defaultImgResId = resources.getIdentifier("kmeet", "drawable", packageName)
         val customAvatarResName = com.connectycube.flutter.connectycube_flutter_call_kit.utils.getString(this, "icon")
         if (TextUtils.isEmpty(customAvatarResName)){
             avatarImg.setImageResource(defaultImgResId)

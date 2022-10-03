@@ -15,7 +15,7 @@
         android:layout_marginTop="64dp"
         android:scaleType="fitCenter"
         tools:ignore="ContentDescription"
-        tools:src="@drawable/connectycube_place_holder" />
+        tools:src="@drawable/kmeet" />
 
     <TextView
         android:id="@+id/user_name_txt"
@@ -40,7 +40,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:padding="8dp"
-        android:textColor="@android:color/holo_green_dark"
+        android:textColor="#FF0083f0"
         android:textSize="24sp"
         tools:text="Incoming audio call" />
 
