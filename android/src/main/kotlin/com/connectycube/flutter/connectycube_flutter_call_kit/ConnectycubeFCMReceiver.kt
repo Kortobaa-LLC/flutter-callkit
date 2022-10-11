@@ -7,7 +7,10 @@ import android.util.Log
 import com.connectycube.flutter.connectycube_flutter_call_kit.utils.ContextHolder
 import com.google.firebase.messaging.RemoteMessage
 import org.json.JSONObject
+import java.util.concurrent.TimeUnit
 
+private val callingCallsMap = mutableMapOf<String, String>()
+private val canceledCallsMap = mutableMapOf<String, String>()
 
 class ConnectycubeFCMReceiver : BroadcastReceiver() {
     private val TAG = "ConnectycubeFCMReceiver"
@@ -28,18 +31,40 @@ class ConnectycubeFCMReceiver : BroadcastReceiver() {
         val remoteMessage = RemoteMessage(intent.extras!!)
 
         val data = remoteMessage.data
-        if (data.containsKey("process_type")) {
-            when (data["process_type"]) {
-                "calling" -> {
-                    processInviteCallEvent(context.applicationContext, data)
-                }
-
-               else ->  {
-                   processEndCallEvent(context.applicationContext, data)
-               }
+        val callId = data["uuid"] ?: return
+        val processType = data["process_type"] ?: return
+        when (processType) {
+            "calling" -> {
+                callingCallsMap[callId] = processType
             }
-
+            "canceled" ->
+            {
+                canceledCallsMap[callId] = processType
+            }
         }
+
+
+        if (canceledCallsMap.containsKey(callId)) {
+            println("Enigma Missed Call $callId")
+            processEndCallEvent(context.applicationContext, data)
+        }
+        else if (callingCallsMap.containsKey(callId)) {
+            println("Enigma New Call $callId")
+            // Wait before check
+            TimeUnit.MILLISECONDS.sleep(500)
+            if (canceledCallsMap.containsKey(callId)) {
+                println("Enigma Missed Call $callId")
+                processEndCallEvent(context.applicationContext, data)
+            }
+            else {
+                println("Enigma New Active Call $callId")
+                processInviteCallEvent(context.applicationContext, data)
+
+            }
+        }
+
+        println("Enigma Calling Map $callingCallsMap")
+        println("Enigma Canceled Map $canceledCallsMap")
     }
 
     private fun processEndCallEvent(applicationContext: Context, data: Map<String, String>) {
@@ -63,12 +88,7 @@ class ConnectycubeFCMReceiver : BroadcastReceiver() {
         val callType =   2 // data["call_type"]?.toInt()  // => video : 1 / audio : 2
         val callInitiatorId = data["caller_id"]?.toInt()
         val callInitiatorName = data["caller_name"]
-        // val callOpponentsString =  ""
-        // data["call_opponents"]
-        //        if (callOpponentsString != null) {
-        //            callOpponents = ArrayList(callOpponentsString.split(',').map { it.toInt() })
-        //        }
-        var callOpponents =  arrayListOf(callInitiatorId ?: -1 )
+        val callOpponents =  arrayListOf(callInitiatorId ?: -1 )
 
 
         val meetingToken = data["token"]
