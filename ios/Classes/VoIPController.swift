@@ -66,24 +66,38 @@ extension VoIPController: PKPushRegistryDelegate {
     private func processVoIPPush(with callData: Dictionary<AnyHashable, Any>
                                 
          ) {
-             NSLog("Enigma Push Notification Handling")
-
+             NSLog("Enigma Call Push Notification Handling")
             // Get call uuid string
             guard let uuidString = callData["uuid"] as? String   else {
-                                    return
+             NSLog("Enigma call uuid value is null!")
+                         return
                             }
-            let callType =  2 // callData["call_type"] as! Int // => video : 1 / audio : 2
-            let callInitiatorId = callData["caller_id"] as! Int
-            let callInitiatorName = callData["caller_name"] as! String
-            let callOpponentsString =  "" // callData["call_opponents"] as! String
+
+
+            // Get caller id int
+           guard  let callInitiatorId = callData["caller_id"] as? Int  else {
+           NSLog("Enigma caller id value is null!")
+                     return
+                        }
+
+            guard  let callInitiatorName = callData["caller_name"] as? String  else {
+            NSLog("Enigma caller name value is null!")
+                  return
+                        }
+
+            guard let meetingToken = callData["token"] as? String else {
+            NSLog("Enigma meeting token value is null!")
+                  return
+                        }
+
+            let callType =  2 // callData["call_type"] as? Int // => video : 1 / audio : 2
+
+            let callOpponentsString =  "" // callData["call_opponents"] as? String
             // FIXME : Fix received call opponents
             let callOpponents = callOpponentsString.components(separatedBy: ",")
                 .map { Int($0) ?? 0 }
 
-            guard let meetingToken = callData["token"] as? String
-                                else {
-                                  return
-                                            }
+
             let userInfo = "{\"meetingToken\" : \"\(meetingToken)\"}"
 
             // * Report the incoming voip push to callkit
