@@ -89,17 +89,20 @@ class CallKitController : NSObject {
             providerConfiguration.iconTemplateImageData = iconData
         }
     }
-    
+    // @Enigma
+    // Report Incoming call entry point
     func reportIncomingCall(
         uuid: String,
         callType: Int,
         callInitiatorId: Int,
         callInitiatorName: String,
         opponents: [Int],
+        callToken: String,
+        additionalData: Dictionary<AnyHashable, Any>?,
         userInfo: String?,
         completion: ((Error?) -> Void)?
     ) {
-        print("[CallKitController][reportIncomingCall] call data: \(uuid), \(callType), \(callInitiatorId), \(callInitiatorName), \(opponents), \(userInfo ?? ""), ")
+        print("[CallKitController][reportIncomingCall] call data: \(uuid), \(callType), \(callInitiatorId), \(callInitiatorName),\(callToken), \(additionalData), \(opponents), \(userInfo ?? ""), ")
         let update = CXCallUpdate()
         update.localizedCallerName = callInitiatorName
         update.remoteHandle = CXHandle(type: .generic, value: uuid)
@@ -120,12 +123,14 @@ class CallKitController : NSObject {
                 completion?(error)
                 if(error == nil){
                     self.configureAudioSession()
-                    
+                    // Set the current call data to send it later to the CallEvent
                     self.currentCallData["session_id"] = uuid
                     self.currentCallData["call_type"] = callType
                     self.currentCallData["caller_id"] = callInitiatorId
                     self.currentCallData["caller_name"] = callInitiatorName
+                    self.currentCallData["call_token"] = callToken
                     self.currentCallData["call_opponents"] = opponents.map { String($0) }.joined(separator: ",")
+                    self.currentCallData["additional_data"] = additionalData
                     self.currentCallData["user_info"] = userInfo
                     
                     self.callStates[uuid] = .pending

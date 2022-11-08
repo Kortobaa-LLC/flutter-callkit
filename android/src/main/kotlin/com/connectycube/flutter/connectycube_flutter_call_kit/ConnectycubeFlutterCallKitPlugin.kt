@@ -148,6 +148,8 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
                         .split(',')
                         .map { it.toInt() })
                     val userInfo = arguments["user_info"] as String
+                    val callToken = arguments["call_token"] as String
+                    val  additionalData = arguments["additional_data"]   as? HashMap<String, Any?>
 
                     showCallNotification(
                         applicationContext!!,
@@ -156,7 +158,9 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
                         callInitiatorId,
                         callInitiatorName,
                         callOpponents,
-                        userInfo
+                        userInfo,
+                        callToken,
+                        additionalData
                     )
 
                     saveCallState(applicationContext, callId, CALL_STATE_PENDING)

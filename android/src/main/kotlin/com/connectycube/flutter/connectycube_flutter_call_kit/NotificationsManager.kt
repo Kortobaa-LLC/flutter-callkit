@@ -29,8 +29,8 @@ fun cancelCallNotification(context: Context, callId: String) {
 }
 
 fun showCallNotification(
-    context: Context, callId: String, callType: Int, callInitiatorId: Int,
-    callInitiatorName: String, callOpponents: ArrayList<Int>, userInfo: String
+    context: Context, callId: String,  callType: Int, callInitiatorId: Int,
+    callInitiatorName: String, callOpponents: ArrayList<Int>, userInfo: String , callToken:String, additionalData : HashMap<String,Any?>?
 ) {
     val notificationManager = NotificationManagerCompat.from(context)
 
@@ -66,7 +66,9 @@ fun showCallNotification(
         callInitiatorId,
         callInitiatorName,
         callOpponents,
-        userInfo
+        userInfo,
+        callToken,
+        additionalData
     )
     val fullScreenPendingIntent = PendingIntent.getActivity(
         context,
@@ -78,6 +80,8 @@ fun showCallNotification(
     val builder: NotificationCompat.Builder =
         createCallNotification(context, callInitiatorName, callTypeTitle, pendingIntent,fullScreenPendingIntent ,ringtone)
 
+
+    // TODO Add callToken and additionalData
     // Add actions
     addCallRejectAction(
         context,

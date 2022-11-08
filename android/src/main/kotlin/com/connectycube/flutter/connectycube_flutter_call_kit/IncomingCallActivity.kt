@@ -19,7 +19,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 fun createStartIncomingScreenIntent(
     context: Context, callId: String, callType: Int, callInitiatorId: Int,
-    callInitiatorName: String, opponents: ArrayList<Int>, userInfo: String
+    callInitiatorName: String, opponents: ArrayList<Int>, userInfo: String, callToken:String, additionalData : HashMap<String,Any?>?
 ): Intent {
     val intent = Intent(context, IncomingCallActivity::class.java)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -42,6 +42,7 @@ class IncomingCallActivity : Activity() {
     private var callInitiatorName: String? = null
     private var callOpponents: ArrayList<Int>? = ArrayList()
     private var callUserInfo: String? = null
+
 
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {

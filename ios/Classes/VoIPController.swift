@@ -69,39 +69,38 @@ extension VoIPController: PKPushRegistryDelegate {
              NSLog("Enigma Call Push Notification Handling")
             // Get call uuid string
             guard let uuidString = callData["uuid"] as? String   else {
-             NSLog("Enigma call uuid value is null!")
+             NSLog("Enigma call uuid value is null, can't proceed!")
                          return
                             }
 
-
             // Get caller id int
            guard  let callInitiatorId = callData["caller_id"] as? Int  else {
-           NSLog("Enigma caller id value is null!")
+           NSLog("Enigma caller id value is null, can't proceed!")
                      return
                         }
 
             guard  let callInitiatorName = callData["caller_name"] as? String  else {
-            NSLog("Enigma caller name value is null!")
+            NSLog("Enigma caller name value is null, can't proceed!")
                   return
                         }
 
-            guard let meetingToken = callData["token"] as? String else {
-            NSLog("Enigma meeting token value is null!")
+            guard let callToken = callData["token"] as? String else {
+            NSLog("Enigma call token value is null, can't proceed!")
                   return
                         }
-
+            // Hard coded values for now
             let callType =  2 // callData["call_type"] as? Int // => video : 1 / audio : 2
-
             let callOpponentsString =  "" // callData["call_opponents"] as? String
             // FIXME : Fix received call opponents
             let callOpponents = callOpponentsString.components(separatedBy: ",")
                 .map { Int($0) ?? 0 }
 
-
-            let userInfo = "{\"meetingToken\" : \"\(meetingToken)\"}"
+            // Additional Data & User Info
+            let additionalData = callData["additional_data"] as? Dictionary<AnyHashable, Any>
+            let userInfo = callData["user_info"] as? String
 
             // * Report the incoming voip push to callkit
-            self.callKitController.reportIncomingCall(uuid: uuidString.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, userInfo: userInfo) { (error) in
+            self.callKitController.reportIncomingCall(uuid: uuidString.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, callToken: callToken, userInfo: userInfo) { (error) in
                 if(error == nil){
                     print("[VoIPController][didReceiveIncomingPushWith] reportIncomingCall SUCCESS")
                 } else {

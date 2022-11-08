@@ -13,7 +13,9 @@ class CallEvent {
     required this.callType,
     required this.callerId,
     required this.callerName,
+    required this.callToken,
     required this.opponentsIds,
+    this.additionalData,
     this.userInfo,
   });
 
@@ -21,6 +23,8 @@ class CallEvent {
   final int callType;
   final int callerId;
   final String callerName;
+  final String callToken;
+
   final Set<int> opponentsIds;
 
   /// Used for exchanging additional data between the Call notification and your app,
@@ -29,12 +33,17 @@ class CallEvent {
   /// after setting it in method showCallNotification
   final Map<String, String>? userInfo;
 
+  /// Custom additional data Json
+  final Map<String, dynamic>? additionalData;
+
   CallEvent copyWith({
     String? sessionId,
     int? callType,
     int? callerId,
     String? callerName,
     Set<int>? opponentsIds,
+    String? callToken,
+    Map<String, dynamic>? additionalData,
     Map<String, String>? userInfo,
   }) {
     return CallEvent(
@@ -43,6 +52,8 @@ class CallEvent {
       callerId: callerId ?? this.callerId,
       callerName: callerName ?? this.callerName,
       opponentsIds: opponentsIds ?? this.opponentsIds,
+      callToken: callToken ?? this.callToken,
+      additionalData: additionalData ?? this.additionalData,
       userInfo: userInfo ?? this.userInfo,
     );
   }
@@ -53,7 +64,9 @@ class CallEvent {
       'call_type': callType,
       'caller_id': callerId,
       'caller_name': callerName,
+      'call_token': callToken,
       'call_opponents': opponentsIds.join(','),
+      'additional_data': additionalData ?? <String, dynamic>{},
       'user_info': jsonEncode(userInfo ?? <String, String>{}),
     };
   }
@@ -65,17 +78,24 @@ class CallEvent {
       callType: map['call_type'] as int,
       callerId: map['caller_id'] as int,
       callerName: map['caller_name'] as String,
+      callToken: map['call_token'] as String,
       opponentsIds:
-      (map['call_opponents'] as String).split(',').map(int.parse).toSet(),
+          (map['call_opponents'] as String).split(',').map(int.parse).toSet(),
+      additionalData: map['additional_data'] != null
+          ? Map<String, dynamic>.from(
+              map['additional_data'],
+            )
+          : null,
       userInfo: map['user_info'] != null
-          ? Map<String, String>.from(jsonDecode(map['user_info']))
+          ? Map<String, String>.from(
+              jsonDecode(map['user_info']),
+            )
           : null,
     );
 
     // userInfo: map['user_info'] == null || map['user_info'].isEmpty
     //     ? null
     //     : Map<String, String>.from(jsonDecode(map['user_info'])),
-
   }
 
   String toJson() => json.encode(toMap());
@@ -90,7 +110,9 @@ class CallEvent {
         'callType: $callType, '
         'callerId: $callerId, '
         'callerName: $callerName, '
+        'callToken: $callToken, '
         'opponentsIds: $opponentsIds, '
+        'additionalData: $additionalData) '
         'userInfo: $userInfo)';
   }
 
@@ -103,17 +125,21 @@ class CallEvent {
         other.callType == callType &&
         other.callerId == callerId &&
         other.callerName == callerName &&
+        other.callToken == callToken &&
         setEquals(other.opponentsIds, opponentsIds) &&
+        mapEquals(other.additionalData, additionalData) &&
         mapEquals(other.userInfo, userInfo);
   }
 
   @override
   int get hashCode {
     return sessionId.hashCode ^
-    callType.hashCode ^
-    callerId.hashCode ^
-    callerName.hashCode ^
-    opponentsIds.hashCode ^
-    userInfo.hashCode;
+        callType.hashCode ^
+        callerId.hashCode ^
+        callerName.hashCode ^
+        callToken.hashCode ^
+        opponentsIds.hashCode ^
+        additionalData.hashCode ^
+        userInfo.hashCode;
   }
 }
