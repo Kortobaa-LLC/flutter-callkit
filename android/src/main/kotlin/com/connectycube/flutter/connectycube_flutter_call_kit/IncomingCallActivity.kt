@@ -42,6 +42,8 @@ class IncomingCallActivity : Activity() {
     private var callInitiatorName: String? = null
     private var callOpponents: ArrayList<Int>? = ArrayList()
     private var callUserInfo: String? = null
+    private  var callToken : String? = null
+    private var additionalData : HashMap<String,Any>? = null
 
 
 
@@ -118,6 +120,9 @@ class IncomingCallActivity : Activity() {
         callInitiatorName = intent.getStringExtra(EXTRA_CALL_INITIATOR_NAME)
         callOpponents = intent.getIntegerArrayListExtra(EXTRA_CALL_OPPONENTS)
         callUserInfo = intent.getStringExtra(EXTRA_CALL_USER_INFO)
+        // Token and AdditionalData
+       callToken = intent.getStringExtra(EXTRA_CALL_TOKEN)
+        additionalData = intent.getSerializableExtra(EXTRA_CALL_ADDITIONAL_DATA) as? (HashMap<String, Any>)
     }
 
     private fun initUi() {
@@ -154,6 +159,8 @@ class IncomingCallActivity : Activity() {
         bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
         bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, callOpponents)
         bundle.putString(EXTRA_CALL_USER_INFO, callUserInfo)
+        bundle.putString(EXTRA_CALL_TOKEN, callToken)
+        bundle.putSerializable(EXTRA_CALL_ADDITIONAL_DATA, additionalData)
 
         val endCallIntent = Intent(this, EventReceiver::class.java)
         endCallIntent.action = ACTION_CALL_REJECT
@@ -170,6 +177,8 @@ class IncomingCallActivity : Activity() {
         bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
         bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, callOpponents)
         bundle.putString(EXTRA_CALL_USER_INFO, callUserInfo)
+        bundle.putString(EXTRA_CALL_TOKEN, callToken)
+        bundle.putSerializable(EXTRA_CALL_ADDITIONAL_DATA, additionalData)
 
         val startCallIntent = Intent(this, EventReceiver::class.java)
         startCallIntent.action = ACTION_CALL_ACCEPT

@@ -503,6 +503,7 @@ class CallStreamHandler(private var context: Context) : EventChannel.StreamHandl
         localBroadcastManager.unregisterReceiver(this)
     }
 
+    // On LocalBroadcast Manager Notification is received
     @SuppressLint("LongLogTag")
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || TextUtils.isEmpty(intent.action)) return
@@ -534,8 +535,12 @@ class CallStreamHandler(private var context: Context) : EventChannel.StreamHandl
             intent.getIntegerArrayListExtra(EXTRA_CALL_OPPONENTS)?.joinToString(separator = ",")
         callEventMap["user_info"] = intent.getStringExtra(EXTRA_CALL_USER_INFO)
 
-        Log.d("ConnectycubeFlutterCallKitPlugin", "callEventMap: $callEventMap")
+        // Token and AdditionalData
+         callEventMap["call_token"] = intent.getStringExtra(EXTRA_CALL_TOKEN)
+         callEventMap["additional_data"] = intent.getSerializableExtra(EXTRA_CALL_ADDITIONAL_DATA)
 
+        Log.d("ConnectycubeFlutterCallKitPlugin", "callEventMap: $callEventMap")
+        // This will be sent to the flutter side
         val callbackData = HashMap<String, Any?>()
         callbackData["args"] = callEventMap
 

@@ -1,29 +1,26 @@
-//package com.connectycube.flutter.connectycube_flutter_call_kit
-//
-//import android.content.BroadcastReceiver
-//import android.content.Context
-//import android.content.Intent
-//import android.util.Log
-//import com.connectycube.flutter.connectycube_flutter_call_kit.utils.ContextHolder
-//import com.google.firebase.messaging.RemoteMessage
-//import org.json.JSONObject
-//import java.util.concurrent.TimeUnit
-//
-//private val callingCallsMap = mutableMapOf<String, String>()
-//private val canceledCallsMap = mutableMapOf<String, String>()
-//
+package com.connectycube.flutter.connectycube_flutter_call_kit
+
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.util.Log
+import com.connectycube.flutter.connectycube_flutter_call_kit.utils.ContextHolder
+import com.google.firebase.messaging.RemoteMessage
+import org.json.JSONObject
+
+
 //class ConnectycubeFCMReceiver : BroadcastReceiver() {
 //    private val TAG = "ConnectycubeFCMReceiver"
 //
 //    override fun onReceive(context: Context?, intent: Intent?) {
-//        Log.d(TAG, "Enigma broadcast received for message")
+//        Log.d(TAG, "broadcast received for message")
 //
 //        ContextHolder.applicationContext = context!!.applicationContext
 //
 //        if (intent!!.extras == null) {
 //            Log.d(
 //                TAG,
-//                "Enigma broadcast received but intent contained no extras to process RemoteMessage. Operation cancelled."
+//                "broadcast received but intent contained no extras to process RemoteMessage. Operation cancelled."
 //            )
 //            return
 //        }
@@ -31,51 +28,33 @@
 //        val remoteMessage = RemoteMessage(intent.extras!!)
 //
 //        val data = remoteMessage.data
-//        val callId = data["uuid"] ?: return
-//        val processType = data["process_type"] ?: return
-//        when (processType) {
-//            "calling" -> {
-//                callingCallsMap[callId] = processType
+//        if (data.containsKey("signal_type")) {
+//            when (data["signal_type"]) {
+//                "startCall" -> {
+//                    processInviteCallEvent(context.applicationContext, data)
+//                }
+//
+//                "endCall" -> {
+//                    processEndCallEvent(context.applicationContext, data)
+//                }
+//
+//                "rejectCall" -> {
+//                    processEndCallEvent(context.applicationContext, data)
+//                }
 //            }
-//            "canceled" ->
-//            {
-//                canceledCallsMap[callId] = processType
-//            }
+//
 //        }
-//
-//
-//        if (canceledCallsMap.containsKey(callId)) {
-//            println("Enigma Missed Call $callId")
-//            processEndCallEvent(context.applicationContext, data)
-//        }
-//        else if (callingCallsMap.containsKey(callId)) {
-//            println("Enigma New Call $callId")
-//            // Wait before check
-//            TimeUnit.MILLISECONDS.sleep(500)
-//            if (canceledCallsMap.containsKey(callId)) {
-//                println("Enigma Missed Call $callId")
-//                processEndCallEvent(context.applicationContext, data)
-//            }
-//            else {
-//                println("Enigma New Active Call $callId")
-//                processInviteCallEvent(context.applicationContext, data)
-//
-//            }
-//        }
-//
-//        println("Enigma Calling Map $callingCallsMap")
-//        println("Enigma Canceled Map $canceledCallsMap")
 //    }
 //
 //    private fun processEndCallEvent(applicationContext: Context, data: Map<String, String>) {
-//        val callId = data["uuid"] ?: return
+//        val callId = data["session_id"] ?: return
 //
 //
 //        processCallEnded(applicationContext, callId)
 //    }
 //
 //    private fun processInviteCallEvent(applicationContext: Context, data: Map<String, String>) {
-//        val callId = data["uuid"]
+//        val callId = data["session_id"]
 //
 //        if (callId == null || CALL_STATE_UNKNOWN != getCallState(
 //                applicationContext,
@@ -85,18 +64,18 @@
 //            return
 //        }
 //
-//        val callType =   2 // data["call_type"]?.toInt()  // => video : 1 / audio : 2
+//        val callType = data["call_type"]?.toInt()
 //        val callInitiatorId = data["caller_id"]?.toInt()
 //        val callInitiatorName = data["caller_name"]
-//        val callOpponents =  arrayListOf(callInitiatorId ?: -1 )
+//        val callOpponentsString = data["call_opponents"]
+//        var callOpponents = ArrayList<Int>()
+//        if (callOpponentsString != null) {
+//            callOpponents = ArrayList(callOpponentsString.split(',').map { it.toInt() })
+//        }
 //
+//        val userInfo = data["user_info"] ?: JSONObject(emptyMap<String, String>()).toString()
 //
-//        val meetingToken = data["token"]
-//        val userInfoData = JSONObject()
-//        userInfoData.put("meetingToken","$meetingToken")
-//        val userInfo =   userInfoData.toString()   // data["user_info"] ?: JSONObject(emptyMap<String, String>()).toString()
-//
-//        if (callType == null || callInitiatorId == null || callInitiatorName == null || meetingToken == null) {
+//        if (callType == null || callInitiatorId == null || callInitiatorName == null || callOpponents.isEmpty()) {
 //            return
 //        }
 //
@@ -114,4 +93,4 @@
 //        saveCallData(applicationContext, callId, data)
 //        saveCallId(applicationContext, callId)
 //    }
-//}
+// }

@@ -27,6 +27,9 @@ class EventReceiver : BroadcastReceiver() {
                 val callInitiatorName = extras?.getString(EXTRA_CALL_INITIATOR_NAME)
                 val callOpponents = extras?.getIntegerArrayList(EXTRA_CALL_OPPONENTS)
                 val userInfo = extras?.getString(EXTRA_CALL_USER_INFO)
+                val callToken = extras?.getString(EXTRA_CALL_TOKEN)
+                val additionalData = extras?.getSerializable(EXTRA_CALL_ADDITIONAL_DATA)
+
                 Log.i(TAG, "NotificationReceiver onReceive Call REJECT, callId: $callId")
 
                 val broadcastIntent = Intent(ACTION_CALL_REJECT)
@@ -37,6 +40,8 @@ class EventReceiver : BroadcastReceiver() {
                 bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
                 bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, callOpponents)
                 bundle.putString(EXTRA_CALL_USER_INFO, userInfo)
+                bundle.putString(EXTRA_CALL_TOKEN, callToken)
+                bundle.putSerializable(EXTRA_CALL_ADDITIONAL_DATA, additionalData)
                 broadcastIntent.putExtras(bundle)
 
                 LocalBroadcastManager.getInstance(context.applicationContext)
@@ -63,6 +68,8 @@ class EventReceiver : BroadcastReceiver() {
                 val callInitiatorName = extras?.getString(EXTRA_CALL_INITIATOR_NAME)
                 val callOpponents = extras?.getIntegerArrayList(EXTRA_CALL_OPPONENTS)
                 val userInfo = extras?.getString(EXTRA_CALL_USER_INFO)
+                val callToken = extras?.getString(EXTRA_CALL_TOKEN)
+                val additionalData = extras?.getSerializable(EXTRA_CALL_ADDITIONAL_DATA)
                 Log.i(TAG, "NotificationReceiver onReceive Call ACCEPT, callId: $callId")
 
                 val broadcastIntent = Intent(ACTION_CALL_ACCEPT)
@@ -73,6 +80,8 @@ class EventReceiver : BroadcastReceiver() {
                 bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
                 bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, callOpponents)
                 bundle.putString(EXTRA_CALL_USER_INFO, userInfo)
+                bundle.putString(EXTRA_CALL_TOKEN, callToken)
+                bundle.putSerializable(EXTRA_CALL_ADDITIONAL_DATA, additionalData)
                 broadcastIntent.putExtras(bundle)
 
                 LocalBroadcastManager.getInstance(context.applicationContext)

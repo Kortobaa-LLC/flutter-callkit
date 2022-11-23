@@ -22,21 +22,21 @@
             android:name=".background_isolates.ConnectycubeFlutterBgPerformingService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service
-            android:name=".ConnectycubeFCMService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+<!--        <service-->
+<!--            android:name=".ConnectycubeFCMService"-->
+<!--            android:exported="false">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
 
-        <receiver
-            android:name=".ConnectycubeFCMReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </receiver>
+<!--        <receiver-->
+<!--            android:name=".ConnectycubeFCMReceiver"-->
+<!--            android:exported="true"-->
+<!--            android:permission="com.google.android.c2dm.permission.SEND">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
     </application>
 </manifest>

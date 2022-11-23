@@ -82,7 +82,6 @@ fun showCallNotification(
 
     // * Add actions
 
-    // TODO Add callToken and additionalData
     // To be received on Call Reject events
     addCallRejectAction(
         context,
@@ -92,9 +91,10 @@ fun showCallNotification(
         callInitiatorId,
         callInitiatorName,
         callOpponents,
-        userInfo
+        userInfo,
+        callToken,
+        additionalData
     )
-    // TODO Add callToken and additionalData
     // To be received on Call Accept events
     addCallAcceptAction(
         context,
@@ -104,7 +104,9 @@ fun showCallNotification(
         callInitiatorId,
         callInitiatorName,
         callOpponents,
-        userInfo
+        userInfo,
+        callToken,
+        additionalData
     )
 
     // Add full screen intent (to show on lock screen)
@@ -121,7 +123,9 @@ fun showCallNotification(
         callType,
         callInitiatorId,
         callInitiatorName,
-        userInfo
+        userInfo,
+        callToken,
+        additionalData
     )
 
     // Set small icon for notification
@@ -174,7 +178,9 @@ fun addCallRejectAction(
     callInitiatorId: Int,
     callInitiatorName: String,
     opponents: ArrayList<Int>,
-    userInfo: String
+    userInfo: String,
+    callToken:String,
+    additionalData : HashMap<String,Any?>?
 ) {
     val bundle = Bundle()
     bundle.putString(EXTRA_CALL_ID, callId)
@@ -183,6 +189,9 @@ fun addCallRejectAction(
     bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
     bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, opponents)
     bundle.putString(EXTRA_CALL_USER_INFO, userInfo)
+    bundle.putString(EXTRA_CALL_TOKEN, callToken)
+    bundle.putSerializable(EXTRA_CALL_ADDITIONAL_DATA, additionalData)
+
 
     val declinePendingIntent: PendingIntent = PendingIntent.getBroadcast(
         context,
@@ -214,7 +223,9 @@ fun addCallAcceptAction(
     callInitiatorId: Int,
     callInitiatorName: String,
     opponents: ArrayList<Int>,
-    userInfo: String
+    userInfo: String,
+    callToken:String,
+    additionalData : HashMap<String,Any?>?
 ) {
     val bundle = Bundle()
     bundle.putString(EXTRA_CALL_ID, callId)
@@ -223,6 +234,8 @@ fun addCallAcceptAction(
     bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
     bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, opponents)
     bundle.putString(EXTRA_CALL_USER_INFO, userInfo)
+    bundle.putString(EXTRA_CALL_TOKEN, callToken)
+    bundle.putSerializable(EXTRA_CALL_ADDITIONAL_DATA, additionalData)
 
 
     val acceptPendingIntent: PendingIntent = PendingIntent.getBroadcast(
@@ -256,7 +269,9 @@ fun addCancelCallNotificationIntent(
     callType: Int,
     callInitiatorId: Int,
     callInitiatorName: String,
-    userInfo: String
+    userInfo: String,
+    callToken:String,
+    additionalData : HashMap<String,Any?>?
 ) {
     val bundle = Bundle()
     bundle.putString(EXTRA_CALL_ID, callId)
@@ -264,6 +279,8 @@ fun addCancelCallNotificationIntent(
     bundle.putInt(EXTRA_CALL_INITIATOR_ID, callInitiatorId)
     bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
     bundle.putString(EXTRA_CALL_USER_INFO, userInfo)
+    bundle.putString(EXTRA_CALL_TOKEN, callToken)
+    bundle.putSerializable(EXTRA_CALL_ADDITIONAL_DATA, additionalData)
 
     val deleteCallNotificationPendingIntent = PendingIntent.getBroadcast(
         appContext,
