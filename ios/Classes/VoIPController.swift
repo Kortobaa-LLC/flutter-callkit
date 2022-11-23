@@ -100,7 +100,7 @@ extension VoIPController: PKPushRegistryDelegate {
             let userInfo = callData["user_info"] as? String
 
             // * Report the incoming voip push to callkit
-            self.callKitController.reportIncomingCall(uuid: uuidString.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, callToken: callToken, userInfo: userInfo , additionalData: additionalData) { (error) in
+            self.callKitController.reportIncomingCall(uuid: uuidString.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, callToken: callToken,  additionalData: additionalData,userInfo: userInfo ) { (error) in
                 if(error == nil){
                     print("[VoIPController][didReceiveIncomingPushWith] reportIncomingCall SUCCESS")
                 } else {

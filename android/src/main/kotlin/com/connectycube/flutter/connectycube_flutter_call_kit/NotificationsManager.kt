@@ -80,9 +80,10 @@ fun showCallNotification(
     val builder: NotificationCompat.Builder =
         createCallNotification(context, callInitiatorName, callTypeTitle, pendingIntent,fullScreenPendingIntent ,ringtone)
 
+    // * Add actions
 
     // TODO Add callToken and additionalData
-    // Add actions
+    // To be received on Call Reject events
     addCallRejectAction(
         context,
         builder,
@@ -93,6 +94,8 @@ fun showCallNotification(
         callOpponents,
         userInfo
     )
+    // TODO Add callToken and additionalData
+    // To be received on Call Accept events
     addCallAcceptAction(
         context,
         builder,
@@ -220,6 +223,7 @@ fun addCallAcceptAction(
     bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
     bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, opponents)
     bundle.putString(EXTRA_CALL_USER_INFO, userInfo)
+
 
     val acceptPendingIntent: PendingIntent = PendingIntent.getBroadcast(
         context,
