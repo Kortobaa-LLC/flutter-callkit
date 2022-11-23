@@ -96,11 +96,11 @@ extension VoIPController: PKPushRegistryDelegate {
                 .map { Int($0) ?? 0 }
 
             // Additional Data & User Info
-            let additionalData = callData["additional_data"] as? Dictionary<AnyHashable, Any>
+            let additionalData = callData["additionalData"] as? Dictionary<AnyHashable, Any>
             let userInfo = callData["user_info"] as? String
 
             // * Report the incoming voip push to callkit
-            self.callKitController.reportIncomingCall(uuid: uuidString.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, callToken: callToken, userInfo: userInfo) { (error) in
+            self.callKitController.reportIncomingCall(uuid: uuidString.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, callToken: callToken, userInfo: userInfo , additionalData: additionalData) { (error) in
                 if(error == nil){
                     print("[VoIPController][didReceiveIncomingPushWith] reportIncomingCall SUCCESS")
                 } else {

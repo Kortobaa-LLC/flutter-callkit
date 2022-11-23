@@ -1,6 +1,6 @@
 name: connectycube_flutter_call_kit
 description: A Kortobaa flutter repo forked from connectycube plugin for displaying call screen when app in background or terminated.
-version: 2.2.1
+version: 3.0.0
 homepage: https://github.com/salamaEnigma/flutter-callkit
 issue_tracker: https://github.com/salamaEnigma/flutter-callkit/issues
 
