@@ -196,6 +196,14 @@ class ConnectycubeFlutterCallKit {
     }
   }
 
+  /// Manually configure audio session for iOS
+  ///  Only supports : iOS
+  static Future<void> configureAudioSession() async {
+    if (Platform.isIOS) {
+      return _methodChannel.invokeMethod("configureAudioSession");
+    }
+  }
+
   /// Get the current call state
   ///
   /// Other platforms than Android and iOS will receive [CallState.unknown]
