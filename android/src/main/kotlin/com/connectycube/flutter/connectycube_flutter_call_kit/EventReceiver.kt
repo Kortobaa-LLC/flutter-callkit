@@ -30,7 +30,8 @@ class EventReceiver : BroadcastReceiver() {
                 val callToken = extras?.getString(EXTRA_CALL_TOKEN)
                 val additionalData = extras?.getSerializable(EXTRA_CALL_ADDITIONAL_DATA)
 
-                Log.i(TAG, "NotificationReceiver onReceive Call REJECT, callId: $callId")
+                Log.i(TAG, "Enigma NotificationReceiver onReceive Call REJECT, callId: $callId")
+                Log.i(TAG, "Enigma NotificationReceiver onReceive Call REJECT, callToken: $callToken")
 
                 val broadcastIntent = Intent(ACTION_CALL_REJECT)
                 val bundle = Bundle()

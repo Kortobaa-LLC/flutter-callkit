@@ -329,14 +329,14 @@ void _backgroundEventsCallbackDispatcher() {
           as Future<void> Function(CallEvent);
 
       try {
+        log("Enigma call event args ${call.arguments['args']}", error: "CHECK");
         Map<String, dynamic> callEventMap =
             Map<String, dynamic>.from(call.arguments['args']);
         final CallEvent callEvent = CallEvent.fromMap(callEventMap);
         await callback(callEvent);
-      } catch (e) {
-        // ignore: avoid_print
-        log('[ConnectycubeFlutterCallKit][_backgroundEventsCallbackDispatcher] An error occurred in your background event handler: $e');
-        // ignore: avoid_print
+      } catch (e, s) {
+        log('[ConnectycubeFlutterCallKit][_backgroundEventsCallbackDispatcher] An error occurred in your background event handler: $s',
+            error: e);
       }
     } else {
       throw UnimplementedError('${call.method} has not been implemented');

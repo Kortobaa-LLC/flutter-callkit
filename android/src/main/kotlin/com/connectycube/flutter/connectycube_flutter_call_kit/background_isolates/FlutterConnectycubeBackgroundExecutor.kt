@@ -241,7 +241,9 @@ class FlutterConnectycubeBackgroundExecutor : MethodCallHandler {
         parameters["call_opponents"] =
             intent.getIntegerArrayListExtra(EXTRA_CALL_OPPONENTS)?.joinToString(separator = ",")
         parameters["user_info"] = intent.getStringExtra(EXTRA_CALL_USER_INFO)
-
+        // Token and AdditionalData
+        parameters["call_token"] = intent.getStringExtra(EXTRA_CALL_TOKEN) as String
+        parameters["additional_data"] = intent.getSerializableExtra(EXTRA_CALL_ADDITIONAL_DATA) as? HashMap<String, Any>
 
         backgroundChannel?.invokeMethod(
             "onBackgroundEvent",

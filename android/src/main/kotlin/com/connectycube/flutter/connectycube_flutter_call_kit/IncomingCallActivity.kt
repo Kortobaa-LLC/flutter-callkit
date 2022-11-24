@@ -122,7 +122,7 @@ class IncomingCallActivity : Activity() {
         callUserInfo = intent.getStringExtra(EXTRA_CALL_USER_INFO)
         // Token and AdditionalData
        callToken = intent.getStringExtra(EXTRA_CALL_TOKEN)
-        additionalData = intent.getSerializableExtra(EXTRA_CALL_ADDITIONAL_DATA) as? (HashMap<String, Any>)
+        additionalData = intent.getSerializableExtra(EXTRA_CALL_ADDITIONAL_DATA) as? HashMap<String, Any>
     }
 
     private fun initUi() {
