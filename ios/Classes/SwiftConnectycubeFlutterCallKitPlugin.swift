@@ -82,7 +82,7 @@ public class SwiftConnectycubeFlutterCallKitPlugin: NSObject, FlutterPlugin {
             result(true)
         }
         else if(call.method == "configureAudioSession"){
-        CallKitController.configureAudioSession()
+        SwiftConnectycubeFlutterCallKitPlugin.callController.configureAudioSession()
         }
         else if(call.method == "showCallNotification"){
             let callId = arguments?["session_id"] as! String
