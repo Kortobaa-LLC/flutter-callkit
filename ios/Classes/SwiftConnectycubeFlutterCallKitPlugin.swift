@@ -84,6 +84,20 @@ public class SwiftConnectycubeFlutterCallKitPlugin: NSObject, FlutterPlugin {
         else if(call.method == "configureAudioSession"){
         SwiftConnectycubeFlutterCallKitPlugin.callController.configureAudioSession()
         }
+        
+        else if(call.method == "startCall"){
+          guard  let uuid = arguments?["uuid"] as? String  else {
+                    NSLog("Enigma can't reportOutgoingCallConnected, callUuid value is null!")
+                          return
+                                }
+            
+            guard  let handle = arguments?["handle"] as? String
+  else {
+                      NSLog("Enigma can't startCall, handle value is null!")
+                            return
+                                  }
+            SwiftConnectycubeFlutterCallKitPlugin.callController.startCall(handle: handle, videoEnabled: false, uuid: uuid)
+              }
           else if(call.method == "reportOutgoingCallConnected"){
             guard  let uuid = arguments?["uuid"] as? String  else {
                       NSLog("Enigma can't reportOutgoingCallConnected, callUuid value is null!")
@@ -91,6 +105,14 @@ public class SwiftConnectycubeFlutterCallKitPlugin: NSObject, FlutterPlugin {
                                   }
               SwiftConnectycubeFlutterCallKitPlugin.callController.reportOutgoingCall(uuid: UUID(uuidString: uuid)! , finishedConnecting: true)
                 }
+        
+        else if(call.method == "reportOutgoingCallConnecting"){
+          guard  let uuid = arguments?["uuid"] as? String  else {
+                    NSLog("Enigma can't reportOutgoingCallConnecting, callUuid value is null!")
+                          return
+                                }
+            SwiftConnectycubeFlutterCallKitPlugin.callController.reportOutgoingCall(uuid: UUID(uuidString: uuid)! , finishedConnecting: false)
+              }
         else if(call.method == "showCallNotification"){
             let callId = arguments?["session_id"] as! String
             let callType = arguments?["call_type"] as! Int

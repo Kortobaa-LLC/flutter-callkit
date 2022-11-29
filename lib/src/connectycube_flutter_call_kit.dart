@@ -204,10 +204,21 @@ class ConnectycubeFlutterCallKit {
     }
   }
 
-  /// Report ios outgoing call connected  to activate audio session
+  /// Report that iOS outgoing call is accepted to activate audio session
   ///  Only supports : iOS
-  static Future<void> reportOutgoingCallConnected(String callUuid) async {
+  static Future<void> reportOutgoingCallAccepted(
+      String callUuid, String handle) async {
     if (Platform.isIOS) {
+      await _methodChannel.invokeMethod("startCall", {
+        "uuid": callUuid,
+        "handle": handle,
+      });
+      await Future.delayed(Duration(milliseconds: 250));
+
+      await _methodChannel
+          .invokeMethod("reportOutgoingCallConnecting", {"uuid": callUuid});
+
+      await Future.delayed(Duration(milliseconds: 250));
       return _methodChannel
           .invokeMethod("reportOutgoingCallConnected", {"uuid": callUuid});
     }

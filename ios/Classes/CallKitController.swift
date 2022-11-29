@@ -243,7 +243,7 @@ extension CallKitController {
     }
     
     func startCall(handle: String, videoEnabled: Bool, uuid: String? = nil) {
-        print("CallKitController: user requested start call handle:\(handle), videoEnabled: \(videoEnabled) uuid: \(uuid ?? "")")
+        print("Enigma CallKitController: user requested start call handle:\(handle), videoEnabled: \(videoEnabled) uuid: \(uuid ?? "")")
         let handle = CXHandle(type: .generic, value: handle)
         let callUUID = uuid == nil ? UUID() : UUID(uuidString: uuid!)
         let startCallAction = CXStartCallAction(call: callUUID!, handle: handle)

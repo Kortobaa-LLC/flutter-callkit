@@ -1,5 +1,5 @@
 ## 3.0.1
-- Add `reportOutgoingCallConnected` to report an outgoing successfully connected call to the system in order to activate audio session.
+- Add `reportOutgoingCallAccepted` method to report an outgoing successfully connected to the system in order to activate audio session.
 
 ## 3.0.0
 - Major changes and fixes on iOS / Android
