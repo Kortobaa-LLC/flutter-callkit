@@ -102,7 +102,7 @@ class CallKitController : NSObject {
         userInfo: String?,
         completion: ((Error?) -> Void)?
     ) {
-        print("[CallKitController][reportIncomingCall] call data: \(uuid), \(callType), \(callInitiatorId), \(callInitiatorName),\(callToken), \(additionalData), \(opponents), \(userInfo ?? ""), ")
+        print("[CallKitController][reportIncomingCall] call data: \(uuid), \(callType), \(callInitiatorId), \(callInitiatorName),\(callToken), \(String(describing: additionalData)), \(opponents), \(userInfo ?? ""), ")
         let update = CXCallUpdate()
         update.localizedCallerName = callInitiatorName
         update.remoteHandle = CXHandle(type: .generic, value: uuid)
@@ -144,7 +144,8 @@ class CallKitController : NSObject {
     }
     
     func reportOutgoingCall(uuid : UUID, finishedConnecting: Bool){
-        print("CallKitController: report outgoing call: \(uuid) connected:\(finishedConnecting)")
+        print("Enigma CallKitController: report outgoing call: \(uuid) connected:\(finishedConnecting)")
+        self.configureAudioSession()
         if !finishedConnecting {
             self.provider.reportOutgoingCall(with: uuid, startedConnectingAt: nil)
         } else {
@@ -195,6 +196,7 @@ class CallKitController : NSObject {
             try audioSession.setPreferredIOBufferDuration(0.005)
             try audioSession.setActive(true)
         } catch {
+            print("Enigma can't configureAudioSession")
             print(error)
         }
     }
@@ -280,7 +282,7 @@ extension CallKitController: CXProviderDelegate {
     }
     
     func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {
-        print("CallKitController: Audio session activated")
+        print("Enigma CallKitController: Audio session activated")
         self.configureAudioSession()
     }
     
@@ -289,7 +291,7 @@ extension CallKitController: CXProviderDelegate {
     }
     
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
-        print("CallKitController: End Call")
+        print("Enigma CallKitController: End Call")
         actionListener?(.endCall, action.callUUID, currentCallData)
         self.callStates[action.callUUID.uuidString.lowercased()] = .rejected
         action.fulfill()

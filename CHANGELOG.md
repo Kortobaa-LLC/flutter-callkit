@@ -1,3 +1,9 @@
+## 3.0.1
+- Add `reportOutgoingCallConnected` to report an outgoing successfully connected call to the system in order to activate audio session.
+
+## 3.0.0
+- Major changes and fixes on iOS / Android
+
 ## 2.2.1
 
 - (Android) Fix receiving the FCM if plugin connected together with `firebase_messaging` plugin;

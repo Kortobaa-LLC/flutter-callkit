@@ -204,6 +204,15 @@ class ConnectycubeFlutterCallKit {
     }
   }
 
+  /// Report ios outgoing call connected  to activate audio session
+  ///  Only supports : iOS
+  static Future<void> reportOutgoingCallConnected(String callUuid) async {
+    if (Platform.isIOS) {
+      return _methodChannel
+          .invokeMethod("reportOutgoingCallConnected", {"uuid": callUuid});
+    }
+  }
+
   /// Get the current call state
   ///
   /// Other platforms than Android and iOS will receive [CallState.unknown]
