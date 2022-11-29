@@ -145,8 +145,10 @@ class CallKitController : NSObject {
     
     func reportOutgoingCall(uuid : UUID, finishedConnecting: Bool){
         print("Enigma CallKitController: report outgoing call: \(uuid) connected:\(finishedConnecting)")
-        self.configureAudioSession()
         if !finishedConnecting {
+            // Configure Audio Session
+            self.configureAudioSession()
+            
             self.provider.reportOutgoingCall(with: uuid, startedConnectingAt: nil)
         } else {
             self.provider.reportOutgoingCall(with: uuid, connectedAt: nil)
